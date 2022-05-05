@@ -1,1 +1,94 @@
-<p>tasks works!</p>
+
+
+<mat-form-field appearance="standard">
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Title Column -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+      <td mat-cell *matCellDef="let row"> {{row.title}} </td>
+    </ng-container>
+
+    <!-- Content Column -->
+    <ng-container matColumnDef="content">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Content </th>
+      <td mat-cell *matCellDef="let row"> {{row.content}} </td>
+    </ng-container>
+
+    <!-- Date Column -->
+    <ng-container matColumnDef="updatedAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+      <td mat-cell *matCellDef="let row"> {{row.updatedAt | date}} </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container class="status" matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+      <td mat-cell *matCellDef="let row">
+
+        <form [formGroup]="taskForm" >
+          <!-- Title -->
+          <mat-form-field appearance="outline" class="invisible">
+            <mat-label>Title</mat-label>
+            <input formControlName="title" matInput placeholder="Title" id="title">
+          </mat-form-field>
+
+          <!-- Status -->
+          <mat-form-field>
+            <mat-label >{{row.status.name}}</mat-label>
+            <mat-select formControlName="status" id="status" (click)="onEdit(row)" (selectionChange)="updateTask(row._id)">
+              <mat-option *ngFor="let item of status" [value]="item._id" >{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Content -->
+          <mat-form-field appearance="outline" class="invisible">
+            <mat-label>Content</mat-label>
+            <input formControlName="content" matInput placeholder="Content" id="content">
+          </mat-form-field>
+
+          <!-- Assignee -->
+          <mat-form-field appearance="outline" class="invisible">
+            <mat-label>Assignee</mat-label>
+            <mat-select formControlName="assignee" placeholder="Assignee" id="assignee">
+              <mat-option *ngFor="let user of users" [value]="user._id">{{user.username}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
+
+      </td>
+    </ng-container>
+    <span class="example-spacer"></span>
+
+    <!-- Edit/Delete Column -->
+    <ng-container class="action" matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+      <td  mat-cell *matCellDef="let row">
+        <button class="edit" mat-icon-button (click)="editTask(row)" color="warn" aria-label="Example icon button with a heart icon">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button class="edit" mat-icon-button (click)="deleteTask(row._id)" color="primary" aria-label="Example icon button with a heart icon">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+</div>
+

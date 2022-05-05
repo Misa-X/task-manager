@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{actionTitle}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="taskForm" >
+
+    <!-- Name -->
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="name" id="name">
+    </mat-form-field>
+
+  </form>
+</div>
+<div mat-dialoge-action [align]="'end'">
+  <button mat-raised-button color="warn" mat-dialoge-close>Close</button>
+  <button style="margin-left: 8px;" mat-raised-button color="primary" (click)="addGender()">{{actionBtn}}</button>
+</div>

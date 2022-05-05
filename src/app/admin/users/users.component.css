@@ -3,6 +3,10 @@ table {
   width: 100%;
 }
 
+.add {
+  margin-top: 10px;
+}
+
 .mat-form-field {
   font-size: 14px;
   width: 100%;
@@ -12,10 +16,6 @@ table {
   width: 25%;
 } */
 
-/* .example-spacer {
-  flex: 1 1 auto;
-} */
-
 
 .invisible{
   display: block;
@@ -23,11 +23,4 @@ table {
   height: 0;
   width: 0;
 }
-/*
-.action {
-  float: right;
-} */
-
-
-
 

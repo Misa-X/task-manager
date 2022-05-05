@@ -1,0 +1,40 @@
+
+<h1 mat-dialog-title>Add New Task</h1>
+<div mat-dialog-content>
+  <form [formGroup]="taskForm" >
+
+    <!-- Title -->
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input formControlName="title" matInput placeholder="Title" id="title">
+    </mat-form-field>
+
+    <!-- Status -->
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status" placeholder="Status" id="status">
+        <mat-option *ngFor="let status of status" [value]="status._id">{{status.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Content -->
+    <mat-form-field appearance="outline">
+      <mat-label>Content</mat-label>
+      <input formControlName="content" matInput placeholder="Content" id="content">
+    </mat-form-field>
+
+    <!-- Assignee -->
+    <mat-form-field appearance="outline">
+      <mat-label>Assignee</mat-label>
+      <mat-select formControlName="assignee" placeholder="Assignee" id="assignee">
+        <mat-option *ngFor="let user of users" [value]="user._id">{{user.username}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</div>
+<div mat-dialoge-action [align]="'end'">
+  <button mat-raised-button color="warn" mat-dialoge-close>Close</button>
+  <button style="margin-left: 8px;" mat-raised-button color="primary" (click)="addTask()">{{actionBtn}}</button>
+</div>
+

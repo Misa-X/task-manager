@@ -3,6 +3,10 @@ table {
   width: 100%;
 }
 
+.add {
+  margin-top: 10px;
+}
+
 .mat-form-field {
   font-size: 14px;
   width: 100%;
@@ -10,10 +14,6 @@ table {
 
 /* td, th {
   width: 25%;
-} */
-
-/* .example-spacer {
-  flex: 1 1 auto;
 } */
 
 
@@ -27,7 +27,5 @@ table {
 .action {
   float: right;
 } */
-
-
 
 
