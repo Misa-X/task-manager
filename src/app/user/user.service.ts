@@ -1,64 +1,55 @@
-import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { throwError, BehaviorSubject } from 'rxjs';
-import { Injectable }  from '@angular/core'
-import { catchError, shareReplay, Subject, tap  } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { WebRequestService } from '../web-request.service';
-import { User } from './user.model'
+import { User } from './user.model';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class UserService {
   user = new Subject<User>();
 
-  private _registerUrl = "http://localhost:3000/user";
-  private _userUrl = "http://localhost:3000/user";
-  private _loginUrl = "http://localhost:3000/login";
+  private _registerUrl = 'http://localhost:3000/user';
+  private _userUrl = 'http://localhost:3000/user';
+  private _loginUrl = 'http://localhost:3000/login';
 
-  constructor(private http: HttpClient, private webReqService: WebRequestService) {}
+  constructor(
+    private http: HttpClient,
+    private webReqService: WebRequestService
+  ) {}
 
-
-  signup(username: string, email: string, password: string, name: string, phone: string, dateOfBirth: string, gender: string) {
-
-  return this.http.post('http://localhost:3000/user', {
-    username: username,
-    password: password,
-    email: email,
-    name: name,
-    phone: phone,
-    dateOfBirth: dateOfBirth,
-    gender: gender
-  })
-  // .pipe(catchError(this.handleError), tap(resData => {
-  //   const user = new User(resData.username)
-  // }))
+  signup(
+    username: string,
+    email: string,
+    password: string,
+    name: string,
+    phone: string,
+    dateOfBirth: string,
+    gender: string
+  ) {
+    return this.http.post('http://localhost:3000/user', {
+      username: username,
+      password: password,
+      email: email,
+      name: name,
+      phone: phone,
+      dateOfBirth: dateOfBirth,
+      gender: gender,
+    });
   }
-  //  login(username: string, password: string) {
-  //   return this.http.post('http://localhost:3000/login', {
-  //     username: username,
-  //     password: password
-  //   })
-  //   .pipe(
-  //     catchError(this.handleError),
-  //     tap((result) => this.save_token(result)
-  //     )
-  //   )
-  // }
 
   login(username: string, password: string) {
     return this.http.post<any>(this._loginUrl, {
-          username: username,
-          password: password
-        })
+      username: username,
+      password: password,
+    });
   }
 
   // Get all users
-  async getUsers(){
-
-    const users =  await this.http.get(this._userUrl);
+  async getUsers() {
+    const users = await this.http.get(this._userUrl);
     return users;
   }
-
-
-
 
   //Handle Authentication
 
@@ -66,16 +57,14 @@ export class UserService {
     return !!localStorage.getItem('token');
   }
 
-  getToken(){
+  getToken() {
     return localStorage.getItem('token');
   }
-
 
   private handleAuthentication(
     username: string,
     userId: string,
     token: string
-
   ) {
     const user = new User(username, userId, token);
     this.user.next(user);
@@ -107,12 +96,4 @@ export class UserService {
     }
     return throwError(errorMessage);
   }
-
-//   private save_token(data) {
-//     if (data.success) {
-//         localStorage.setItem('token', data.token);
-//         return;
-//     }
-// }
 }
-

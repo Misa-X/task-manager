@@ -2,57 +2,97 @@
   <div class="alert alert-danger" *ngIf="error">
     <p>{{ error }}</p>
   </div>
-  <h2 mat-dialog-title class="text-center"> Sign Up </h2>
-  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate class="d-flex-center">
+  <h2 mat-dialog-title class="text-center">Sign Up</h2>
+  <form
+    [formGroup]="signupForm"
+    (ngSubmit)="onSubmit()"
+    novalidate
+    class="d-flex-center"
+  >
     <div class="example-container">
-        <!-- Username -->
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="Username" formControlName="username">
-        </mat-form-field>
+      <!-- Username -->
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Username" formControlName="username" />
+      </mat-form-field>
 
-        <!-- Password -->
-        <mat-form-field appearance="outline">
-          <input matInput type="password" placeholder="Password" formControlName="password">
-        </mat-form-field>
+      <!-- Password -->
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+        />
+      </mat-form-field>
 
-        <!-- Email -->
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="Email" formControlName="email">
-          <mat-error *ngIf="!signupForm.get('email')?.errors?.required && (signupForm.get('email')?.errors?.pattern)">
-            Please enter a valid email address
-          </mat-error>
-          <mat-error *ngIf="signupForm.get('email')?.invalid && (signupForm.get('email')?.dirty || signupForm.get('email')?.touched) && signupForm.get('email')?.errors?.required">
-            Email is required
-          </mat-error>
-        </mat-form-field>
+      <!-- Email -->
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Email" formControlName="email" />
+        <mat-error
+          *ngIf="
+            !signupForm.get('email')?.errors?.required &&
+            signupForm.get('email')?.errors?.pattern
+          "
+        >
+          Please enter a valid email address
+        </mat-error>
+        <mat-error
+          *ngIf="
+            signupForm.get('email')?.invalid &&
+            (signupForm.get('email')?.dirty ||
+              signupForm.get('email')?.touched) &&
+            signupForm.get('email')?.errors?.required
+          "
+        >
+          Email is required
+        </mat-error>
+      </mat-form-field>
 
-        <!-- Name -->
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="name" formControlName="name">
-        </mat-form-field>
+      <!-- Name -->
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="name" formControlName="name" />
+      </mat-form-field>
 
-        <!-- Phone -->
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="Phone" formControlName="phone">
-        </mat-form-field>
+      <!-- Phone -->
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Phone" formControlName="phone" />
+      </mat-form-field>
 
-        <!-- DateOfBirth -->
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="Date of Birth" formControlName="dateOfBirth">
-        </mat-form-field>
+      <!-- DateOfBirth -->
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          placeholder="Date of Birth"
+          formControlName="dateOfBirth"
+        />
+      </mat-form-field>
 
-        <!-- Gender -->
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="Gender" formControlName="gender">
-          <mat-error *ngIf="signupForm.get('gender')?.invalid && (signupForm.get('gender')?.dirty || signupForm.get('gender')?.touched) && signupForm.get('gender')?.errors?.required">
-            Gender is required
-          </mat-error>
-        </mat-form-field>
+      <!-- Gender -->
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Gender" formControlName="gender" />
+        <mat-error
+          *ngIf="
+            signupForm.get('gender')?.invalid &&
+            (signupForm.get('gender')?.dirty ||
+              signupForm.get('gender')?.touched) &&
+            signupForm.get('gender')?.errors?.required
+          "
+        >
+          Gender is required
+        </mat-error>
+      </mat-form-field>
 
-        <div class="mt-top">
-          <button [disabled]="!signupForm.valid" mat-raised-button color="primary" mat-button>Sign In</button>
-        </div>
-        <a routerLink="/signup"> Already registered? Click here to Login!</a>
+      <div class="mt-top">
+        <button
+          [disabled]="!signupForm.valid"
+          mat-raised-button
+          color="primary"
+          mat-button
+        >
+          Sign In
+        </button>
+      </div>
+      <a routerLink="/signup"> Already registered? Click here to Login!</a>
     </div>
   </form>
 </div>

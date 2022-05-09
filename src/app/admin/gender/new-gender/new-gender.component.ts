@@ -8,77 +8,70 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-new-gender',
   templateUrl: './new-gender.component.html',
-  styleUrls: ['./new-gender.component.css']
+  styleUrls: ['./new-gender.component.css'],
 })
 export class NewGenderComponent implements OnInit {
-
   gender: Gender[] = [];
 
-  actionBtn: string = "Save";
-  actionTitle: string = "Add new gender";
+  actionBtn: string = 'Save';
+  actionTitle: string = 'Add new gender';
 
-  taskForm !: FormGroup;
+  taskForm!: FormGroup;
 
   constructor(
-    private formbuildder : FormBuilder,
-    private taskService:TaskService,
+    private formbuildder: FormBuilder,
+    private taskService: TaskService,
     private router: Router,
     private dialogRef: MatDialogRef<NewGenderComponent>,
-    @Inject(MAT_DIALOG_DATA) public editData : any
-  ) { }
-
+    @Inject(MAT_DIALOG_DATA) public editData: any
+  ) {}
 
   // Create gender
   addGender() {
-    if(!this.editData){
-      if(this.taskForm.valid) {
-        this.taskService.createGender(this.taskForm.value)
-        .subscribe({
-          next:(res)=>{
-            alert("Gender successfully added!");
+    if (!this.editData) {
+      if (this.taskForm.valid) {
+        this.taskService.createGender(this.taskForm.value).subscribe({
+          next: (res) => {
+            alert('Gender successfully added!');
             this.taskForm.reset();
             this.dialogRef.close('save');
             this.router.navigate(['/manageGender']);
           },
-          error:()=>{
-            alert("Could not add gender!")
-          }
-        })
+          error: () => {
+            alert('Could not add gender!');
+          },
+        });
       }
-    } else{
-      this.updateGender()
-
+    } else {
+      this.updateGender();
     }
   }
 
   // Update gender
   updateGender() {
-    this.taskService.updateGender(this.taskForm.value, this.editData._id)
-    .subscribe({
-      next:(res) =>{
-        alert("Gender updated successfully!");
-        this.taskForm.reset();
-        this.dialogRef.close('update');
-      },
-      error: () =>{
-        alert("Could not update gender!");
-      }
-    })
+    this.taskService
+      .updateGender(this.taskForm.value, this.editData._id)
+      .subscribe({
+        next: (res) => {
+          alert('Gender updated successfully!');
+          this.taskForm.reset();
+          this.dialogRef.close('update');
+        },
+        error: () => {
+          alert('Could not update gender!');
+        },
+      });
   }
 
   ngOnInit(): void {
-
     this.taskForm = this.formbuildder.group({
-      name : ['', Validators.required]
+      name: ['', Validators.required],
+    });
 
-    })
-
-    if(this.editData) {
-      this.actionBtn = "Update";
-      this.actionTitle = "Edit gender";
+    if (this.editData) {
+      this.actionBtn = 'Update';
+      this.actionTitle = 'Edit gender';
       this.taskForm.controls['name'].setValue(this.editData.title);
-
     }
   }
-
 }

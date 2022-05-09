@@ -1,84 +1,78 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Task } from './task.model';
 import { TaskService } from '../task.service';
-import {MatDialog} from '@angular/material/dialog';
-import { ActivatedRoute} from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { User } from '../user/user.model';
 import { Status } from 'src/app/admin/status/status.model';
 import { NewTaskComponent } from './new-task/new-task.component';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-
-
-
-
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
-  styleUrls: ['./tasks.component.css']
+  styleUrls: ['./tasks.component.css'],
 })
 export class TasksComponent implements OnInit {
-
-
   tasks: Task[] = [];
   gender: any[] = [];
-  newTask: Task[]= [];
+  newTask: Task[] = [];
   users: User[] = [];
   status: Status[] = [];
 
+  taskForm!: FormGroup;
 
-  taskForm !: FormGroup;
-
-  displayedColumns: string[] = ['title', 'content', 'updatedAt', 'status', 'action'];
+  displayedColumns: string[] = [
+    'title',
+    'content',
+    'updatedAt',
+    'status',
+    'action',
+  ];
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-
   constructor(
     private taskService: TaskService,
-    private dialog : MatDialog,
+    private dialog: MatDialog,
     private route: ActivatedRoute,
-    private formbuilder : FormBuilder
-
-
-
+    private formbuilder: FormBuilder
   ) {
-
     this.taskForm = this.formbuilder.group({
-
-      status : [''],
+      status: [''],
       title: [''],
       content: [''],
-      assignee: ['']
-    })
-   }
+      assignee: [''],
+    });
+  }
 
   editStatus = new FormGroup({
-    name: new FormControl('')
-  })
-
+    name: new FormControl(''),
+  });
 
   // get all tasks
-  public getAllTasks(){
+  public getAllTasks() {
+    this.taskService.getTasks().subscribe((tasks: any) => {
+      const {
+        docs,
+        docs: [
+          {
+            status: { name },
+          },
+        ],
+      } = tasks.data;
+      (this.tasks = docs), name;
+      this.dataSource = new MatTableDataSource(docs);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
 
-    this.taskService.getTasks()
-     .subscribe((tasks: any) => {
-
-        const {docs, docs:[{status:{name}}]} = tasks.data;
-        this.tasks  = docs, name;
-        this.dataSource = new MatTableDataSource(docs)
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-
-        console.log(tasks.data.docs);
-
-      }
-    )
+      console.log(tasks.data.docs);
+    });
   }
 
   applyFilter(event: Event) {
@@ -90,33 +84,27 @@ export class TasksComponent implements OnInit {
     }
   }
 
-//get status
-public getStatus() {
-    this.taskService.getStatus()
-    .subscribe((status: any) => {
-
-      const{docs} = status.data;
+  //get status
+  public getStatus() {
+    this.taskService.getStatus().subscribe((status: any) => {
+      const { docs } = status.data;
       this.status = docs;
-
-      console.log("test status", this.status);
-    })
+    });
   }
-
-
-
-
 
   // edit task
   editTask(task: any) {
-    console.log("misa",task)
-    this.dialog.open(NewTaskComponent, {
-      width: '80%',
-      data:task
-     }).afterClosed().subscribe(val=>{
-       if(val==='update'){
-         this.getAllTasks();
-       }
-     })
+    this.dialog
+      .open(NewTaskComponent, {
+        width: '80%',
+        data: task,
+      })
+      .afterClosed()
+      .subscribe((val) => {
+        if (val === 'update') {
+          this.getAllTasks();
+        }
+      });
   }
 
   onEdit(task: Task) {
@@ -124,82 +112,44 @@ public getStatus() {
     this.taskForm.controls['status'].setValue(task.status);
     this.taskForm.controls['content'].setValue(task.content);
     this.taskForm.controls['assignee'].setValue(task.assignee);
-
-
   }
-
-
-
 
   // delete task
-  deleteTask(taskId: string){
-    this.taskService.deleteTask(taskId)
-    .subscribe({
-      next:(res)=>{
-        alert("Task successfuly deleted!");
+  deleteTask(taskId: string) {
+    this.taskService.deleteTask(taskId).subscribe({
+      next: (res) => {
+        alert('Task successfuly deleted!');
         this.getAllTasks();
       },
-      error:() =>{
-        alert("Could not delete the task!");
-      }
-    })
+      error: () => {
+        alert('Could not delete the task!');
+      },
+    });
   }
-
 
   // get gender
   public getGender() {
-    this.taskService.getGender()
-    .subscribe((gender: any) => {
+    this.taskService.getGender().subscribe((gender: any) => {
       console.log(gender);
       this.gender = gender;
-    }
-    )
+    });
   }
 
   //update task status
-  updateTask(taskId:any) {
-
-    // const tasks = new Task(
-    //   taskId,
-    //   "6243b67ff6da0750dcb3301d",
-    //   "Meeting",
-    //   "Meet misa",
-    //   "6267fb7b761f320668a555f5"
-    // )
-    // this.taskForm.controls['title'].setValue(task.title);
-    // this.taskForm.controls['status'].setValue(task.status);
-    // this.taskForm.controls['content'].setValue(task.content);
-    // this.taskForm.controls['assignee'].setValue(task.assignee);
-
-    console.log(this.taskForm.value, "taskId", taskId)
-
-    this.taskService.updateTask(this.taskForm.value, taskId)
-    .subscribe({
-      next:(res) =>{
-        alert("Task updated successfully!");
+  updateTask(taskId: any) {
+    this.taskService.updateTask(this.taskForm.value, taskId).subscribe({
+      next: (res) => {
+        alert('Task updated successfully!');
         console.log(res);
-
-
       },
-      error: () =>{
-        alert("Could not update task!");
-      }
-    })
+      error: () => {
+        alert('Could not update task!');
+      },
+    });
   }
-
-
-
-
-
-
 
   ngOnInit() {
-
-
     this.getAllTasks();
     this.getStatus();
-
-
   }
-
 }

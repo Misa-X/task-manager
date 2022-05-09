@@ -2,24 +2,38 @@
   <div class="alert alert-danger" *ngIf="error">
     <p>{{ error }}</p>
   </div>
-  <h2 mat-dialog-title class="text-center"> Login </h2>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate class="d-flex-center">
+  <h2 mat-dialog-title class="text-center">Login</h2>
+  <form
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
+    novalidate
+    class="d-flex-center"
+  >
     <div class="example-container">
       <div>
-
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Username" formControlName="username">
+          <input matInput placeholder="Username" formControlName="username" />
         </mat-form-field>
-
       </div>
       <div class="mt-top-2">
         <mat-form-field appearance="outline">
-          <input matInput type="password" placeholder="Password" formControlName="password">
-
+          <input
+            matInput
+            type="password"
+            placeholder="Password"
+            formControlName="password"
+          />
         </mat-form-field>
       </div>
       <div class="mt-top">
-        <button [disabled]="!loginForm.valid" mat-raised-button color="primary" mat-button>Sign In</button>
+        <button
+          [disabled]="!loginForm.valid"
+          mat-raised-button
+          color="primary"
+          mat-button
+        >
+          Sign In
+        </button>
       </div>
       <a routerLink="/signup"> New User? Click here to Sign up!</a>
     </div>

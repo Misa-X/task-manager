@@ -1,21 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TaskService } from 'src/app/task.service';
 import { NewStatusComponent } from './new-status/new-status.component';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatDialog} from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
 import { Status } from './status.model';
-
-
 
 @Component({
   selector: 'app-status',
   templateUrl: './status.component.html',
-  styleUrls: ['./status.component.css']
+  styleUrls: ['./status.component.css'],
 })
 export class StatusComponent implements OnInit {
-
   status: Status[] = [];
 
   displayedColumns: string[] = ['name', 'action'];
@@ -24,61 +21,51 @@ export class StatusComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(
-    private taskService: TaskService,
-    private dialog : MatDialog
-  ) { }
+  constructor(private taskService: TaskService, private dialog: MatDialog) {}
 
   openDialog() {
     this.dialog.open(NewStatusComponent, {
-     width: '30%'
+      width: '30%',
     });
   }
 
   // Get all status
-  public getAllStatus(){
-
-    this.taskService.getStatus()
-     .subscribe((status: any) => {
-
-        const {docs} = status.data;
-        this.status  = docs;
-        console.log("STATUS:",status.data.docs);
-        this.dataSource = new MatTableDataSource(docs)
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-
-        console.log(status.data.docs);
-
-      }
-    )
+  public getAllStatus() {
+    this.taskService.getStatus().subscribe((status: any) => {
+      const { docs } = status.data;
+      this.status = docs;
+      this.dataSource = new MatTableDataSource(docs);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
   }
 
-    // edit status
-    editTask(status: any) {
-      console.log("misa",status)
-      this.dialog.open(NewStatusComponent, {
+  // edit status
+  editTask(status: any) {
+    this.dialog
+      .open(NewStatusComponent, {
         width: '80%',
-        data:status
-       }).afterClosed().subscribe(val=>{
-         if(val==='update'){
-           this.getAllStatus();
-         }
-       })
-    }
+        data: status,
+      })
+      .afterClosed()
+      .subscribe((val) => {
+        if (val === 'update') {
+          this.getAllStatus();
+        }
+      });
+  }
 
   // delete status
-  deleteStatus(statusId: string){
-    this.taskService.deleteStatus(statusId)
-    .subscribe({
-      next:(res)=>{
-        alert("Status successfuly deleted!");
+  deleteStatus(statusId: string) {
+    this.taskService.deleteStatus(statusId).subscribe({
+      next: (res) => {
+        alert('Status successfuly deleted!');
         this.getAllStatus();
       },
-      error:() =>{
-        alert("Could not delete the status!");
-      }
-    })
+      error: () => {
+        alert('Could not delete the status!');
+      },
+    });
   }
 
   // Filter status
@@ -92,7 +79,6 @@ export class StatusComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllStatus()
+    this.getAllStatus();
   }
-
 }
